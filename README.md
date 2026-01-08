@@ -1,1 +1,1 @@
-yes
+comic widget storage
