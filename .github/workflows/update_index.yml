@@ -1,5 +1,10 @@
 name: Update index.json
 
+
+permissions:
+  contents: write
+
+
 on:
   push:
     paths:
