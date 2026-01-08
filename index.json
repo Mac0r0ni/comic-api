@@ -1,1 +1,18 @@
-
+{
+  "version": 1,
+  "images": [
+    "comics/0.jpg",
+    "comics/1.jpg",
+    "comics/10.jpg",
+    "comics/11.jpg",
+    "comics/12.jpg",
+    "comics/2.jpg",
+    "comics/3.jpg",
+    "comics/4.jpg",
+    "comics/5.jpg",
+    "comics/6.jpg",
+    "comics/7.jpg",
+    "comics/8.jpg",
+    "comics/9.jpg"
+  ]
+}
