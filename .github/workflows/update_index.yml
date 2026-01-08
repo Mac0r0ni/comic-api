@@ -1,1 +1,63 @@
+name: Update index.json
+
+on:
+  push:
+    paths:
+      - "comics/**"
+  workflow_dispatch:
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate index.json
+        shell: bash
+        run: |
+          set -e
+
+          if [ -f index.json ]; then
+            VERSION=$(jq -r '.version' index.json)
+          else
+            VERSION=0
+          fi
+
+          VERSION=$((VERSION + 1))
+
+          # Collect image files
+          IMAGES=$(find comics -type f \( \
+            -iname "*.jpg" -o \
+            -iname "*.jpeg" -o \
+            -iname "*.png" -o \
+            -iname "*.webp" \
+          \) | sort | jq -R . | jq -s .)
+
+          if [ "$IMAGES" = "[]" ]; then
+            echo "No images found in comics/"
+            exit 1
+          fi
+
+          # Write new index.json
+          jq -n \
+            --argjson version "$VERSION" \
+            --argjson images "$IMAGES" \
+            '{version: $version, images: $images}' > index.json
+
+      - name: Commit and push index.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add index.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Auto-update index.json"
+          git push
 
